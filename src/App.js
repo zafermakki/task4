@@ -4,42 +4,48 @@ import { motion } from "framer-motion";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-
+import useMediaQuery from "@mui/material/useMediaQuery";
 import HeadsetIcon from "@mui/icons-material/Headset";
-import PersonIcon from "@mui/icons-material/Person";
-import SupportAgentIcon from "@mui/icons-material/SupportAgent";
 import CallIcon from "@mui/icons-material/Call";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 const slidesData = [
   { id: 1, label: "VOICE MODE",more: "READ MORE", icon: <HeadsetIcon sx={{ fontSize: 64 }} /> },
-  { id: 2, label: "USER MODE",more: "READ MORE" ,icon: <PersonIcon sx={{ fontSize: 64 }} /> },
-  { id: 3, label: "SUPPORT", more: "READ MORE",icon: <SupportAgentIcon sx={{ fontSize: 64 }}/>},
-  { id: 4, label: "CALL US", more: "READ MORE",icon: <CallIcon sx={{ fontSize: 64 }} /> },
-  { id: 5, label: "SETTINGS",more: "READ MORE" ,icon: <SettingsIcon sx={{ fontSize: 64 }} /> },
+  { id: 2, label: "CALL US", more: "READ MORE",icon: <CallIcon sx={{ fontSize: 64 }} /> },
+  { id: 3, label: "SETTINGS",more: "READ MORE" ,icon: <SettingsIcon sx={{ fontSize: 64 }} /> },
 ];
 
 
-const SlideCard = ({ active, item, offset }) => {
+const SlideCard = ({ active, item, offset, isMobile, isTablet }) => {
   const baseZ = 100;
   const computedZ = active ? 1000 : baseZ - Math.abs(offset);
+  
+  const cardSize = isMobile ? 180 : isTablet ? 210 : 240;
 
+  const leftPosition = isMobile 
+    ? "31%"   
+    : isTablet 
+    ? "37%"   
+    : "35%";
+
+  const iconSize = isMobile ? 48 : isTablet ? 56 : 64;
+  
   return (
     <motion.div
       animate={{
         x: offset * 150,
         rotate: offset * 18 + 24,
-        scale: active ? 1.18 : 0.92,
+        scale: active ? (isMobile ? 1.1 : 1.18) : (isMobile ? 0.9 : 0.92),
         opacity: active ? 1 : 0.85,
       }}
       transition={{ type: "spring", stiffness: 130, damping: 14 }}
       style={{
-        width: 240,
-        height: 240,
+        width: cardSize,
+        height: cardSize,
         borderRadius: 32,
         position: "absolute",
-        left: "36%",
-        top: "50%",
+        left: leftPosition, 
+        top: "35%",
         transform: "translate(-50%, -50%)",
         background: active
           ? "linear-gradient(145deg, #021802 0%, #0c4f0c 40%, #15c115 80%, #3eff3e 100%)"
@@ -55,15 +61,14 @@ const SlideCard = ({ active, item, offset }) => {
         userSelect: "none",
       }}
     >
-      <Typography fontSize={64}>{item.icon}</Typography>
+      <Typography fontSize={iconSize}>{item.icon}</Typography>
 
-      {/* إظهار النصوص فقط إذا كانت البطاقة نشطة */}
       {active && (
         <>
           <Typography color="white" mt={2} fontWeight="700">
             {item.label}
           </Typography>
-          <Typography color="white" mt={2} fontSize={"10px"}>
+          <Typography color="white" mt={1} fontSize={"10px"}>
             {item.more}
           </Typography>
         </>
@@ -73,6 +78,10 @@ const SlideCard = ({ active, item, offset }) => {
 };
 
 export default function App() {
+  const isMobile = useMediaQuery("(max-width: 600px)");
+  const isTablet = useMediaQuery("(min-width: 600px) and (max-width: 1024px)");
+
+
   const [activeIndex, setActiveIndex] = useState(2);
 
   const prevSlide = () => {
@@ -125,6 +134,8 @@ export default function App() {
                 item={item}
                 active={activeIndex === i}
                 offset={wrappedOffset}
+                isMobile={isMobile}
+                isTablet={isTablet}
               />
             </div>
           );
