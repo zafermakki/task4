@@ -27,7 +27,7 @@ export default function SlideCard({ active, item, offset, isMobile, isTablet }) 
         borderRadius: 32,
         position: "absolute",
         left: leftPosition,
-        top: "35%",
+        top: "25%",
         transform: "translate(-50%, -50%)",
         background: active
           ? "linear-gradient(145deg,#021802,#0c4f0c,#15c115,#3eff3e)"

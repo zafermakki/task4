@@ -12,6 +12,7 @@ export default function SliderControls({ prevSlide, nextSlide }) {
         transform: "translateX(-50%)",
         display: "flex",
         gap: 3,
+        marginBottom: "40px"
       }}
     >
       <IconButton
